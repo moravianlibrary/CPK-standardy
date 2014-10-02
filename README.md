@@ -1,1 +1,1 @@
-Tento projekt byl založen jako místo pro vývoj a zpřístupnění standardů umožňujících zapojení knihovních systémů do Centrálního portálu knihoven nebo do jiných portálů založených na podobných principech jako CPK.  
+Tento projekt byl založen jako místo pro vývoj a zpřístupnění standardů umožňujících zapojení knihovních systémů do Centrálního portálu knihoven nebo do jiných portálů založených na podobných principech jako CPK. Všechny informace jsou uloženy na wiki tohoto projektu, připomínky lze vkládat do issues.
