@@ -10,6 +10,11 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script>$(function() {
+		$("#lookupAgencySample").load("messages/LookupAgency.html");
+		$("#lookupAgencyResponseSample").load("messages/LookupAgencyResponse.html");
+	});</script>
     <title>Příručka k NCIP toolkitu</title>
   </head>
 
@@ -45,12 +50,12 @@
 		<p>Zde uvádíme příklad, jak by mohla taková meziknihovní NCIP komunikace vypadat:</p>
 
 	  <h3>NCIP dotaz:</h3>
-	  <?= include "messages/LookupAgency.html" ?>
+		<div id="lookupAgencySample"></div>
 		<p>V této NCIP zprávě žádáme o informace o knihovně, které dotaz posíláme. To je zřejmé z tagu <code>&lt;ns1:LookupAgency&gt;</code>, která je, jako každá jiná NCIP služba, definovaná v <a target="blank" href="http://www.niso.org/apps/group_public/download.php/6517/z39-83-1-2008.pdf#page=17">oficiální dokumentaci</a>.</p>
-	  </p>Pomocí tagu <code>&lt;ns1:AgencyId&gt;</code> se představujeme a díky tagu <code>&lt;ns1:AgencyElementType&gt;</code> je možno blíže specifikovat, co si přejeme vědět.</p>
+		<p>Pomocí tagu <code>&lt;ns1:AgencyId&gt;</code> se představujeme a díky tagu <code>&lt;ns1:AgencyElementType&gt;</code> je možno blíže specifikovat, co si přejeme vědět.</p>
 
 	  <h3>NCIP odpověď:</h3>
-	  <?= include "messages/LookupAgencyResponse.html" ?>
+		<div id="lookupAgencyResponseSample"></div>
 		<p>Knihovna, jíž jsme dotaz poslali, nám poslala odpověď, ve které se zmiňuje o svém úplném názvu v mezinárodním formátu a také o své adrese.</p>
 		<p>Ačkoliv jsme žádali o mnohem více informací, dotazovaná knihovna uznala za vhodné zveřejnit pouze tyto elementární informace, nutné k navázání kontaktu.</p>
 		<p>Později se dozvíme, jak lze přímo v toolkitu nastavit informace, které bude spravovaná knihovna na tento dotaz vracet.</p>
