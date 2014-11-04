@@ -86,7 +86,7 @@
 
 	  <h3>Maven buildování</h3>
 		<p>Projekt je zapotřebí zbuildovat v adresáři <code>xcncip2toolkit/core/trunk</code> příkazem <code>mvn install</code>. Jestliže build není úspěšný, upravíme příkaz tak, aby Maven přeskočil testy, tedy <code>mvn install -Dmaven.test.skip</code>. V našem případě se build povedl až napotřetí, opětovným spuštěním <code>mvn install</code>.</p>
-		<p>Čeká nás ještě jeden build a to na adrese <code>xcncip2toolkit/connector/aleph/20/trunk</code>. Postupujeme stejně - zde by měly testy projít bez problémů.</p>
+		<p>Toto bylo sestavení NCIP jádra. čeká nás ještě build konektoru (v našem případě Aleph), kterýžto je k nalezení to na adrese <code>xcncip2toolkit/connector/aleph/20/trunk</code>. Postupujeme stejně - zde by měly testy projít bez problémů.</p>
 
 	  <h3>Import do Eclipse</h3>
 		<p>Otevřeme nový workspace, nevytváříme nový projekt, pouze naimportujeme <code>xcncip2toolkit/core/trunk</code> a <code>xcncip2toolkit/connector/aleph/20/trunk</code>.</p>
@@ -97,38 +97,7 @@
 		<p>Pro ověření správnosti konfigurace klikněte pravým tlačítkem myši na projekt <code>aleph-web</code> a zvolte <code>Debug As -&gt; Debug on Server</code>. Mělo by se Vám zobrazit 'uživatelské rozhraní' aleph konektoru hojně užívaného při jeho vývoji.</p>
 
 	  <h1>Vývoj konektoru</h1>
-		<p>Chystáte-li se vyvíjet Aleph konektor pro účely dalších knihoven běžících na Alephu, pak byste se měli seznámit s mapováním služeb z Alephu do NCIP formátu.</p>
-		<p>V zásadě lze použít <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs">Aleph RESTful APIs</a>, <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-X-Services">Aleph X-Services</a>, či <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-Web-Services">Aleph Web Services</a>.</p>
-
-	  <h2>Aleph RESTful APIs</h2>
-		<p>Dosud napsaný konektor využívá této oblasti alephu co nejvíce z toho důvodu, aby i knihovny, které si nemohou dovolit tak drahé služby, jako jsou X-Services, byly konektorem obsloužitelné.</p>
-		<p>Nejdůležitější třídou vzhledem k Aleph RESTful APIs je <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/util/RestDlfConnector.java">RestDlfConnector.java</a>, která nejdříve extrahuje data z konfiguračního souboru <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/web/src/main/resources/toolkit.properties">toolkit.properties</a> a následně je použita k vytváření URL potřebných k vytvoření rest-dlf dotazů na aleph API a jiných potřebných "zprostředkovatelských" funkcí.</p>
-
-	  <h3><u><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Patrons">Patrons</a></u></h3>
-		<p>V této oblasti Alephu se vyskytuje mnoho důležitých informací spojených s uživateli. Jedná se především o jejich práva, blokace/pokuty, půjčené/rezervované položky, stav účtu a v neposlední řadě také kontaktní 'adresy' uživatelů.</p>
-		<p>Mapování všech uživatelských dat v Aleph konektoru provádí SAX parser (<a target="blank" href="http://en.wikipedia.org/wiki/Simple_API_for_XML">Simple API for XML</a>), jmenovitě <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/restdlf/handlers/AlephUserHandler.java">AlephUserHandler.java</a></p>
-		<p>Skvěle SAX popisující článek naleznete na <a target="blank" href="http://www.journaldev.com/1198/java-sax-parser-example-tutorial-to-parse-xml-to-list-of-objects">JournalDev</a>.</p>
-
-	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Address">Patron -> Address</a></h4>
-		<p>Stávající verze konektoru odtud sbírá adresu uživatele v nestrukturovaném formátu a to z toho důvodu, že málokterá knihovna je opravdu v databázi strukturalizuje, resp. využívá polí <code>z304-address-1</code> až <code>z304-address-5</code> k rozeznání uložených dat. Toto rozhodnutí je pochopitelné pakliže vezmeme v úvahu nejednoznačnost označení těchto polí.</p>
-		<p>Dále je zde možno nalézt telefonní číslo/a, elektronickou adresu, či poštovní směrovací číslo, přičemž lze všechny tyto údaje využít při mapování do NCIP služby LookupUser.</p>
-
-<!-- TODO  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Patron-Blocks">Patron Blocks</a></h4>
-		<p>TODO this -&gt; Where to localize it</p>
-
-	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Patron-Registration">Patron Registration</a></h4>
-		<p>TODO this -&gt; Where to localize it</p> -->
-
-	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Circulation-Actions">Patron -> Circulation Actions</a></h4>
-		<p>Zde se nabízí možnost získat informace o zůstatku na účtu v knihovně, počtu výpůjček, žádostí a detailu pokut.</p>
-		<p>Všechny tyto údaje mají využití pouze ve službě LookupUser.</p>
-
-	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Loans">Patron -> Loans</a></h4>
-		<p>Tady hledáme všechny aktuální výpůjčky, respektive odkazy na ně.</p>
-		<p>Užití nacházíme opět pouze u LookupUser služby.</p>
-
-<!-- TODO  <h3><u><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Records">Records</a></u></h3>
-		<p></p>-->
+		<p>Chystáte-li se vyvíjet Aleph konektor pro účely dalších knihoven běžících na Alephu, pak byste se měli seznámit s mapováním služeb z Alephu do NCIP formátu a hlavně, s ohledem na budoucí vývojáře, dodržovat předem daný code style a k přenosu užívat pokud možno pouze normalizované hodnoty.</p>
 
 	  <h2>NCIP code style</h2>
 		<p>Je zde několik zvyklostí, se kterými byste se před vývojem vlastního konektoru měli seznámit.</p>
@@ -142,10 +111,66 @@
 			<pre>NCIPServiceValidatorConfiguration.ValidateMessagesAgainstSchema=true</pre></p>
 		<p>Nastavíte-li hodnotu na <code>false</code>, tak Váš Responder již nadále nebude validovat dotaz vůči normalizovaným hodnotám.</p> 
 		<p>Vypnutí validace podle schématu se doporučuje pouze a jen při vývojových potížích.</p>
-	  <h3>Konfigurace konektoru</h3>
+
+	<!-- TODO: include agency address, name, version & schema to validate against -->
+
+	<h2>Mapování Aleph API -&gt; NCIP</h2>
+		<p>V zásadě lze použít <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs">Aleph RESTful APIs</a>, <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-X-Services">Aleph X-Services</a>, či <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-Web-Services">Aleph Web Services</a>.</p>
+
+	  <h3>Aleph RESTful APIs</h3>
+		<p>Dosud napsaný konektor využívá této oblasti alephu co nejvíce z toho důvodu, aby i knihovny, které si nemohou dovolit tak drahé služby, jako jsou X-Services, byly konektorem obsloužitelné.</p>
+		<p>Nejdůležitější třídou konektoru vzhledem k Aleph RESTful APIs je <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/util/RestDlfConnector.java">RestDlfConnector.java</a>, která nejdříve extrahuje data z konfiguračního souboru <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/web/src/main/resources/toolkit.properties">toolkit.properties</a> a následně se používá k vytváření URL potřebných k vytvoření rest-dlf dotazů na aleph API a jiných potřebných "zprostředkovatelských" funkcí.</p>
+
+	  <h4><u><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Patrons">Patrons</a></u></h4>
+		<p>V této oblasti Alephu se vyskytuje mnoho důležitých informací spojených s uživateli. Jedná se především o jejich práva, blokace/pokuty, půjčené/rezervované položky, stav účtu a v neposlední řadě také kontaktní 'adresy' uživatelů.</p>
+		<p>Pro zpracování dat použijeme LookupUser službu.</p>
+		<p><a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/web/src/main/resources/toolkit.properties">V konfiguraci</a> pak toolkitu sdělíme, jak jsme delegáta LookupUser služby pojmenovali. V našem případě jsme vytvořili třídu <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/AlephLookupUserService.java">AlephLookupUserService.java</a> a proto delegáta definujeme následovně:</p>
+		<pre>LookupUserService.class=org.extensiblecatalog.ncip.v2.aleph.AlephLookupUserService</pre>
+		<p>Od našeho delegáta se očekává, že z dat, která se mu na vstupu dostanou (initiation data, service context, service manager), vytvoří výstup typu <code>response data</code>. Aby toho byl náš konektor schopen dosáhnout, tak za užití již dříve zmiňovaného <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/util/RestDlfConnector.java">RestDlfConnector.java</a> dostane předpracovanou odpověď, kterou pak dle požadavků na vstupu zformátuje do LookupUserResponseData (v případě Lookup User služby).</p>
+		<p>Co všechno NCIP vyžaduje od Response Data můžete nalézt <a target="blank" href="http://www.niso.org/schemas/ncip/v2_02/ncip_v2_02.xsd">ve schématu</a>. Je dobrým zvykem v něm vyhledávat (Ctrl + F) takto: e="LookupUserRe</p>
+		<p>Váš prohlížeč Vám již nabídne pouze jedinou shodu. Tvar této vyhledávací syntaxe vychází z toho, že hledáme element s atributem name a jeho přesně danou hodnotou. Mohli bychom zadat name="LookUserResponse", ale vzhledem k vysoké frekvenci dotazů vývojářů na nutnost prezence jednotlivých elementů v odpovědi pro NCIP, doporučujeme používat zkrácený formát, který Vám ušetří mnoho času.</p>
+
+		<p>Další otázka vyvstává při zpracování odpovědí Aleph API. Odpovědí je samotné mapování do NCIPu:</p>
+		<p>Mapování všech uživatelských dat v Aleph konektoru provádí SAX parser (<a target="blank" href="http://en.wikipedia.org/wiki/Simple_API_for_XML">Simple API for XML</a>), jmenovitě <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/restdlf/handlers/AlephUserHandler.java">AlephUserHandler.java</a></p>
+		<p>Výpůjčky uživatele zpracovává <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/restdlf/handlers/AlephItemHandler.java">AlephItemHandler.java</a>, zatímco uživatelovy požadavky, chcete-li žádosti, má na starosti <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/restdlf/handlers/AlephRequestItemHandler.java">AlephRequestItemHandler.java</a>.</p>
+		<p>Kvalitní článek o SAX parsování naleznete na <a target="blank" href="http://www.journaldev.com/1198/java-sax-parser-example-tutorial-to-parse-xml-to-list-of-objects">JournalDev</a>.</p>
+
+	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Address">Patron -> Address</a></h4>
+		<p>Stávající verze konektoru odtud sbírá adresu uživatele v nestrukturovaném formátu a to z toho důvodu, že málokterá knihovna je opravdu v databázi strukturalizuje, resp. využívá polí <code>z304-address-1</code> až <code>z304-address-5</code> k rozeznání uložených dat. Toto rozhodnutí je pochopitelné pakliže vezmeme v úvahu nejednoznačnost označení těchto polí.</p>
+		<p>Dále je zde možno nalézt telefonní číslo/a, elektronickou adresu, či poštovní směrovací číslo, přičemž lze všechny tyto údaje využít při mapování do NCIP služby LookupUser.</p>
+
+	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Patron-Blocks">Patron -> Blocks</a></h4>
+		<p>Zde nalezneme všechny blokace přidělené uživateli. Využití hledejme opět pouze u LookupUser.</p>
+
+	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Patron-Registration">Patron -> Registration</a></h4>
+		<p>Zdejší údaje vypovídají o pravomocích uživatele. Využití - LookupUser.</p>
+
+	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Circulation-Actions">Patron -> Circulation Actions</a></h4>
+		<p>Zde se nabízí možnost získat informace o zůstatku na účtu v knihovně, počtu výpůjček, žádostí a detailů pokut, resp. sankcí/poplatků.</p>
+		<p>Všechny tyto údaje mají tedy využití ve službě LookupUser a CreateUserFiscalTransaction.</p>
+
+	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Loans">Patron -> Loans</a></h4>
+		<p>Tady jsou k nalezení všechny aktuální i neaktuální výpůjčky. Použití je tedy jednak v získávání půjčených titulů a datumů vrácení, jednak ve výpisu historie výpůjček a onak v prodlužování výpůjční lhůty.</p>
+		<p>Informace o formátování žádosti na prodloužení výpůjčky hledejte <a target="blank" hraf="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Loans#Loans-InputURI">zde</a>.</p>
+
+	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Holds">Patron -> Requested Holds</a></h4>
+		<p>Toto zákoutí slouží ke sběru informací o nevyřízených žádostech uživatele a k jejich případnému zrušení. Využití je tedy tentokrát u CancelRequestItem a LookupRequest.</p>
+	 
+	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Hold-per-Item">Patron -> Records -> Hold</a></h4>
+		<p>Existence této služby je založena na možnosti poslat sem PUT HTTP request tak, aby se zaevidovala žádost, tedy proběhla služba RequestItem. <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Hold-per-Item#HoldperItem-InputXML">Více o formátování PUT HTTP requestu zde</a>.</p>
+
+	  <h4><u><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Records">Records</a></u></h4>
+		<p>Tato část Alephu se do NCIP mapuje pouze ke službám LookupItem a LookupItemSet.</p>
+
+	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Items">Record -> Items</a></h4>
+		<p>Jak již bylo řečeno, využití těchto údajů se, vzhledem k NCIP, nachází ve službách vyhledávání titulů a exemplářů.</p>
+		<p>Ukládají se zde tedy pouze informace o těchto typech dat.</p>
+
+	<hr>
+	<h3>Konfigurace konektoru</h3>
 		<p>Jak již bylo zmíněno dříve, funkci konfiguračního souboru plní příslušný <i>toolkit.properties</i>: <code>core/trunk/service/src/main/java/org/extensiblecatalog/ncip/v2/service/toolkit.properties</code></p>
 		<p>Po implementaci nové služby je zapotřebí do tohoto souboru uvést cestu k třídě, která plní danou funkci. My jsme například po implementaci služby <code>LookupUserService</code> zahrnuli tento řádek: <code>LookupUserService.class=org.extensiblecatalog.ncip.v2.aleph.AlephLookupUserService</code></p>
-	<!-- TODO: include agency address, name, version & schema to validate against -->
+
 	</section>
 
         <footer>
@@ -167,4 +192,4 @@
       </div>
     </div>
   </body>
-</html>
+</htmltV
