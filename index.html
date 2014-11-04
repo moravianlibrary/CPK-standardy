@@ -41,7 +41,7 @@
 
 	  <h2>Specifikace projektu</h2>
         	<p>Tento projekt byl založen jako místo pro vývoj a zpřístupnění standardů umožňujících zapojení knihovních systémů do Centrálního portálu knihoven nebo do jiných portálů založených na podobných principech jako CPK. Všechny informace jsou uloženy na wiki tohoto projektu, připomínky lze vkládat do issues.</p>
-
+<hr>
 	  <h2>Standardy používané projektem</h2>
 		<p>Projekt se zaměřuje na efektivní meziknihovní komunikaci za použití <a target="blank" href="http://www.niso.org/home/">NISO</a> standardu pod názvem <a target="blank" href="http://www.niso.org/workrooms/ncip">NCIP</a> (<a target="blank" href="http://www.ncip.info/introduction-to-ncip.html">zde oficiální stránky</a>).</p>
 		<p>Vývoje a implementace NCIP standardu se ujala organizace <a target="blank" href="http://www.extensiblecatalog.org/">eXtensible Catalog</a>. S ohledem na vývojáře knihovních služeb pak na <a target="blank" href="https://code.google.com/p/xcncip2toolkit/">google code</a> založila verzovací systém, kde všechny knihovny, mající zájem na rozvoji a kompatibilitě NCIP, sdílejí svůj postup.</p>
@@ -60,9 +60,11 @@
 		<p>Ačkoliv jsme žádali o mnohem více informací, dotazovaná knihovna uznala za vhodné zveřejnit pouze tyto elementární informace, nutné k navázání kontaktu.</p>
 		<p>Později se dozvíte, jak lze přímo v toolkitu nastavit informace, které bude spravovaná knihovna na tento dotaz vracet.</p>
 
+<hr>
 	  <h1 id="instalace">Instalace toolkitu</h1>
 		<p>Vzhledem k tomu, že si přejeme, aby byly naše služby k dispozici pokud možno nonstop, měli bychom si obstarat výkonný server, na kterém by XCNCIP2Toolkit běžel. Servery se provozují zejména na linuxovém jádru a proto se zaměříme na instalaci pro Linux.</p>
 
+<hr>
 	  <h2 id="stazeni">Stažení prerekvizit</h2>
 		<p>Všechny námi použité programy jsou doporučené. Jistě cesta povede i jinudy, ale zde se zaměříme na postup, který jsme úspěšně použili při vývoji Aleph konektoru.</p>
 
@@ -81,8 +83,9 @@
 	  <h3>Apache Tomcat</h3>
 		<p>Jako Java Servlet jsme se rozhodli použít <a target="blank" href="http://tomcat.apache.org/download-80.cgi">Tomcat 8.0</a>, jehož binární soubory jsme pouze stáhli a extrahovali do složky, kam běžně ukládáme software třetích stran. Dobrým zvykem je složka 'opt' v kořenovém adresáři: <code>/opt/tomcat</code></p>
 
+<hr>
 	  <h2 id="konfigurace">Konfigurace vývojového prostředí</h2>
-		<p>V této části instalace nás čeká buildování pomocí Maven, import Maven projektu do Eclipse a nastavení Servletu v Eclipse, aby bylo možné elegantně ladit chyby.</p>
+		<p>V této části instalace nás čeká buildování pomocí Maven, import Maven projektu do Eclipse a nastavení Servletu v Eclipse, aby bylo možné elegantně ladit či trasovat chyby.</p>
 
 	  <h3>Maven buildování</h3>
 		<p>Projekt je zapotřebí zbuildovat v adresáři <code>xcncip2toolkit/core/trunk</code> příkazem <code>mvn install</code>. Jestliže build není úspěšný, upravíme příkaz tak, aby Maven přeskočil testy, tedy <code>mvn install -Dmaven.test.skip</code>. V našem případě se build povedl až napotřetí, opětovným spuštěním <code>mvn install</code>.</p>
@@ -96,9 +99,11 @@
 		<p>Po otevření okna <code>Servers</code> (<code>Window -&gt; Show View -&gt; Others -&gt; Servers</code>) zvolte <code>New Server -&gt; Tomcat 8.0</code>, nastavte Vámi při instalaci zvolený adresář a vše potvrďte.</p>
 		<p>Pro ověření správnosti konfigurace klikněte pravým tlačítkem myši na projekt <code>aleph-web</code> a zvolte <code>Debug As -&gt; Debug on Server</code>. Mělo by se Vám zobrazit 'uživatelské rozhraní' aleph konektoru hojně užívaného při jeho vývoji.</p>
 
+<hr>
 	  <h1>Vývoj konektoru</h1>
 		<p>Chystáte-li se vyvíjet Aleph konektor pro účely dalších knihoven běžících na Alephu, pak byste se měli seznámit s mapováním služeb z Alephu do NCIP formátu a hlavně, s ohledem na budoucí vývojáře, dodržovat předem daný code style a k přenosu užívat pokud možno pouze normalizované hodnoty.</p>
 
+<hr>
 	  <h2>NCIP code style</h2>
 		<p>Je zde několik zvyklostí, se kterými byste se před vývojem vlastního konektoru měli seznámit.</p>
 		<p>Jsou jimi například jednorodé formátování, ukládání konstant do specifické statické třídy (viz <code>connectors/aleph/20/trunk/util/AlephConstants.java</code>), či používání normalizovaných hodnot a schémat.</p>
@@ -112,11 +117,11 @@
 		<p>Nastavíte-li hodnotu na <code>false</code>, tak Váš Responder již nadále nebude validovat dotaz vůči normalizovaným hodnotám.</p> 
 		<p>Vypnutí validace podle schématu se doporučuje pouze a jen při vývojových potížích.</p>
 
-	<!-- TODO: include agency address, name, version & schema to validate against -->
-
+<hr>
 	<h2>Mapování Aleph API -&gt; NCIP</h2>
 		<p>V zásadě lze použít <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs">Aleph RESTful APIs</a>, <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-X-Services">Aleph X-Services</a>, či <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-Web-Services">Aleph Web Services</a>.</p>
 
+<hr>
 	  <h3>Aleph RESTful APIs</h3>
 		<p>Dosud napsaný konektor využívá této oblasti alephu co nejvíce z toho důvodu, aby i knihovny, které si nemohou dovolit tak drahé služby, jako jsou X-Services, byly konektorem obsloužitelné.</p>
 		<p>Nejdůležitější třídou konektoru vzhledem k Aleph RESTful APIs je <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/util/RestDlfConnector.java">RestDlfConnector.java</a>, která nejdříve extrahuje data z konfiguračního souboru <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/master/connectors/aleph/20/trunk/web/src/main/resources/toolkit.properties">toolkit.properties</a> a následně se používá k vytváření URL potřebných k vytvoření rest-dlf dotazů na aleph API a jiných potřebných "zprostředkovatelských" funkcí.</p>
@@ -165,12 +170,24 @@
 	  <h4><a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Items">Record -> Items</a></h4>
 		<p>Jak již bylo řečeno, využití těchto údajů se, vzhledem k NCIP, nachází ve službách vyhledávání titulů a exemplářů.</p>
 		<p>Ukládají se zde tedy pouze informace o těchto typech dat.</p>
+	
+<hr>
+	<h3>Aleph X-Services</h3>
+		<p>X-Services se s ohledem na nízkorozpočtové organizace nepoužívá téměř vůbec. Je však použito k ověření uživatelem zadaného hesla, zda je správné. Znát správnost uživatelem zadaného hesla se může hodit například při ověřování jeho identity v jakési front-end aplikaci s grafickým rozhraním (v našem případě je to <a target="blank" href="https://github.com/vufind-org/vufind">VuFind</a>).</p>
+		<p>Více o ověření identity uživatele přes X-Services najdete <a target="blank" href="https://developers.exlibrisgroup.com/aleph/apis/Aleph-X-Services/bor_info#bor_info-InputParameters">zde</a>.</p>
+		<p>Nebo <a target="blank" href="https://github.com/moravianlibrary/xcncip2toolkit/blob/731e910be63bf4ae603ac94290689fb6ec3078bb/connectors/aleph/20/trunk/jar/src/main/java/org/extensiblecatalog/ncip/v2/aleph/AlephXServices/AlephMediator.java#L191">si prostudujte</a> jak to funguje uvnitř toolkitu. Doporučujeme k tomu použít Eclipse a ladit řádek po řádku a snažit se pochopit, proč se na jednotlivých místech ve zdrojovém kódu vyskytují jednotlivé proměnné a proč mají zrovna tu hodnotu, kterou vidíte.</p>
 
 	<hr>
 	<h3>Konfigurace konektoru</h3>
 		<p>Jak již bylo zmíněno dříve, funkci konfiguračního souboru plní příslušný <i>toolkit.properties</i>: <code>core/trunk/service/src/main/java/org/extensiblecatalog/ncip/v2/service/toolkit.properties</code></p>
-		<p>Po implementaci nové služby je zapotřebí do tohoto souboru uvést cestu k třídě, která plní danou funkci. My jsme například po implementaci služby <code>LookupUserService</code> zahrnuli tento řádek: <code>LookupUserService.class=org.extensiblecatalog.ncip.v2.aleph.AlephLookupUserService</code></p>
+		<p>Po implementaci nové služby je zapotřebí do tohoto souboru uvést cestu k třídě, která plní danou funkci. My jsme například po implementaci služby <code>Lookup Item</code> zahrnuli tento řádek: <code>LookupItemService.class=org.extensiblecatalog.ncip.v2.aleph.AlephLookupItemService</code>, protože se třída, kterou jsme vyvinuli, jmenuje AlephLookupItemService.java</p>
+		<p>A na závěr je třeba do konfigurace zahrnout i informace o URL serveru a jeho portu, na kterém poběží Java Servlet, názvech knihoven používaných v API a dalších kustomizačních položkách se sebevysvětlujícími názvy.</p>
 
+<hr>
+<div style="text-align:center">
+	<h4>Díky za pozornost, to je od nás vše!</h4>
+	<h4>Nechť se Vám programuje s lehkostí a zábavou.</h4>
+	<h6>Jakékoliv dotazy směřujte na <a target="blank" href="mailto:kozlovsky@mzk.cz?subject=Dotaz ohledně dokumentace k Aleph konektoru">e-mail</a></h6></div>
 	</section>
 
         <footer>
